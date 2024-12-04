@@ -3,12 +3,23 @@ import numpy as np
 
 
 def extract_mul_instructions(line):
-    # Match valid `mul(X,Y)` patterns
-    pattern = r"mul\((\d+),(\d+)\)"
-    matches = re.findall(pattern, line)
-    # Convert matches to a list of integer pairs
+    p1_sum = 0
+    p2_sum = 0
+    part_2 = True
 
-    return [(int(x), int(y)) for x, y in matches]
+    for i, _, x, y in re.findall(r"(mul|don't|do)\(((\d+),(\d+)|)\)", line):
+        if i == "mul":
+            sum_result = (int(x) * int(y))
+            p1_sum += sum_result
+            if part_2:
+                p2_sum += sum_result
+
+        if i == "don't":
+            part_2 = False
+        if i == "do":
+            part_2 = True
+
+    return p1_sum, p2_sum
 
 
 def multiply_and_sum(pairs):
@@ -17,16 +28,17 @@ def multiply_and_sum(pairs):
 
 
 def main(filename):
-    total_sum = 0
+    total_sum_p1 = 0
+    total_sum_p2 = 0
     with open(filename, 'r') as f:
-        for line in f:
-            mul_pairs = extract_mul_instructions(line)
-            total_sum += multiply_and_sum(mul_pairs)
+        sums = extract_mul_instructions(f.read())
+        total_sum_p1 += sums[0]
+        total_sum_p2 += sums[1]
 
-    return total_sum
+    return total_sum_p1, total_sum_p2
 
 
 if __name__ == "__main__":
-    input_file = "/home/flor/Workspace/AdventOfCode/2024/input/input_day_03.txt"
+    input_file = "input/input_day_03.txt"
     result = main(input_file)
     print(result)
