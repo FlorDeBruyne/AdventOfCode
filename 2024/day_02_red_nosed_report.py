@@ -31,7 +31,7 @@ def main(input_list) -> bool:
 
 if __name__ == "__main__":
     outputs = []
-    with open("/home/flor/Workspace/AdventOfCode/2024/input_day_02.txt", "r") as f:
+    with open("/home/flor/Workspace/AdventOfCode/2024/day_02.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
             input_list = line.strip().split()

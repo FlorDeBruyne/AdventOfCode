@@ -3,7 +3,7 @@ import re
 
 
 if __name__ == "__main__":
-    input_file = "input/input_day_03.txt"
+    input_file = "input/day_03.txt"
     result = 0
     with open(input_file, "r") as f:
         for line in f.readlines():

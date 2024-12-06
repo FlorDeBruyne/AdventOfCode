@@ -43,7 +43,7 @@ def search_X_MAS(matrix):
 
 
 if __name__ == '__main__':
-    with open("input/input_day_04.txt", "r") as f:
+    with open("input/day_04.txt", "r") as f:
         character_matrix = [row.strip() for row in f.readlines()]
         print(search_word(character_matrix, 'XMAS'))
         print(search_X_MAS(character_matrix))
