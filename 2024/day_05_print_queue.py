@@ -1,40 +1,49 @@
-import re
-def set_rules(input_list):
-    temp = re.findall(r"\d{1,2}", "".join(x for x in input_list))
-    numbers = []
-    for i in range(0, len(temp)-2, 2):
-        numbers.append((temp[i], temp[i+1]))
+from collections import defaultdict
 
-    print(numbers)
+def parse_rules(rule_list):
+    adjacency_list = defaultdict(list)
+    for rule in rule_list:
+        x, y = map(int, rule.split('|'))
+        adjacency_list[x].append(y)
+    return adjacency_list
 
-    rules = []
 
-    for i in range(0, len(numbers)-1):
-        num_i = numbers[i]
-        for j in range(i, len(numbers)-1):
-            num_j = numbers[j]
-            if numbers[i] in rules:
-                idx_i = rules.index(numbers[i])
-                if idx_i != len(rules)-1:
-                    if not rules[idx_i+1]:
-                        rules[idx_i+1] = numbers[j]
-                    elif rules[idx_i+1] == numbers[j]:
-                        # print("WRONG?")
-                        continue
-            else:
-                rules.append(numbers[i])
+def is_valid_update(update, adjacency_list):
+    for x in adjacency_list:
+        for y in adjacency_list[x]:
+            if x in update and y in update:
+                if update.index(x) > update.index(y):
+                    return False
+    return True
 
-    return rules
+def get_middle_page(update):
+    return update[len(update) // 2]
 
-if __name__ == "__main__":
-    with open("input/day_05.txt", "r") as f:
+def main(filename):
+    total = 0
+    converted_lists = []
+
+    with open(filename, "r") as f:
         input_list = f.read().split("\n")
         idx = input_list.index('')
+
         undefined_rules = input_list[:idx]
         pages = input_list[idx:]
 
-    rules = set_rules(undefined_rules)
+    rules = parse_rules(undefined_rules)
 
 
-    print(f"Undefined rules: {undefined_rules}")
-    print(f"defined rules: {rules}")
+    for item in pages:
+        if item:
+            converted_lists.append([int(num) for num in item.split(',')])
+
+    for update in converted_lists:
+        if is_valid_update(update, rules):  # Check if the update is valid
+            middle_page = get_middle_page(update)  # Get the middle page number
+            total += middle_page  # Add to the total sum
+
+    print(f"Total sum of middle page numbers: {total}")
+
+if __name__ == "__main__":
+    main("input/day_05.txt")
+
